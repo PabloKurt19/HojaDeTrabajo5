@@ -1,16 +1,17 @@
+# -*- coding: cp1252 -*-
 # Universidad del Valle de Guatemala
 # Algoritmos y Estructura de datos
 # Pablo Ortiz 15533
-# Andrea Maybell
+# Andrea Maybell Pena 15127
 # Hoja de trabajo 5
 # El codigo simula los procesos realizados por el procesador. Esta basado en los codigos de ejmplo de calse
 
 
-
+#imports
 import simpy
 import random
 
-
+#recorrido del proceso
 def proceso(simpyEnv, tiempoProceso, name, ram, cantidadMem, cantidadInstrucciones, velpros):
     global tiempoTotal
     global tmps
@@ -64,13 +65,16 @@ def proceso(simpyEnv, tiempoProceso, name, ram, cantidadMem, cantidadInstruccion
     yield ram.put(cantidadMem)
     print('tiempo: %f - %s (terminated), retorna %d de memoria ram' % (simpyEnv.now, name, cantidadMem))
     tiempoTotal += (simpyEnv.now -tiempollegada) #tiempo de todos los procesos
-    tmpos.append(simpyEnv.now - tiempollegada) 
+    tmpos.append(simpyEnv.now - tiempollegada)
+    
 #Variables
 velpros = 3.0 # instrucciones por tiempo
 memoria_ram= 100 #cantidad de ram
-cant_procesos = 25 #procesos a ejecutar
+cant_procesos = 200 #procesos a ejecutar
 tiempoTotal=0.0 #inicializa la variable que almacenara el tiempo total de los procesos
 tmpos=[] #se guardara cada tiempo individual para extraer la desviacion estandar
+rank = 1 # numero de intervalos a ejecutar
+seed= 1904
 
 
 simpyEnv = simpy.Environment()  #ambiente simpy
@@ -79,9 +83,7 @@ ram = simpy.Container(simpyEnv, init=memoria_ram, capacity=memoria_ram) #ssimula
 waiting = simpy.Resource (simpyEnv, capacity=2) #acceso a operaciones entrada/salida (cola9
 
 #Semilla de random 
-random.seed(1904)
-rank = 1 # numero de intervalos a ejecutar
-
+random.seed(seed)
 
 # procesos que se simularán
 for inicial in range(cant_procesos):
@@ -99,7 +101,7 @@ promedio=(tiempoTotal/cant_procesos)
 print('El tiempo promeido es: %f' % (promedio))
 
 
-#Desvest
+#Desviacion estandar
 suma=0
 
 for xinicial in tmpos:
